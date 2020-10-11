@@ -1,4 +1,4 @@
 [build]
-  build = "yarn install"
+  build = "yarn build"
   functions = "functions/"
   
