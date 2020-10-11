@@ -1,4 +1,3 @@
 [build]
-  build = "yarn build"
   functions = "functions/"
   
