@@ -46,36 +46,18 @@ exports.handler = async function(event) {
     props['author'] = {},  props['publisher'] = {},  props['date'] = {}
     props['meta_description'] = '', props['keywords'] =[]
     props['isAccessibleForFree'] = ''
+
     var meta = {}
-    
-    //console.log(props['url'])
-    //console.log(dom.window.document.querySelector("script[type='application/ld+json']").text)
     if (dom.window.document.querySelector("script[type='application/ld+json']")) {
       try {
-        meta=JSON.parse(dom.window.document.querySelector("script[type='application/ld+json']").text)
+        meta=JSON.parse(dom.window.document.querySelector("script[type='application/ld+json']").text.replace(/&#x27;/g,'"'))
       }
       catch {
         meta = {}
       }
     }
-    //const meta = dom.window.document.querySelector("script[type='application/ld+json']") ? JSON.parse(dom.window.document.querySelector("script[type='application/ld+json']").text.replace(/&#x27;/g,'"')) : null
+    if (meta['@graph']) {meta = meta['@graph'][0]}
     if (meta) {
-      if (meta['author'] && meta['author']['image']) {
-        meta['author']['image']['type']= meta['author']['image']['@type']
-        delete meta['author']['image']['@type']
-      }
-      if (meta['author'] ) {
-        meta['author']['type']= meta['author']['@type']
-        delete meta['author']['@type']
-      }
-      if (meta['publisher'] &&  meta['publisher']['logo']) {
-        meta['publisher']['logo']['type']= meta['publisher']['logo']['@type']
-        delete meta['publisher']['logo']['@type']
-      }
-      if (meta['publisher']) {
-        meta['publisher']['type']= meta['publisher']['@type']
-        delete meta['publisher']['@type']
-      }
       props['author'] = meta.author ? meta.author : {}
       props['publisher'] = meta.publisher ? meta.publisher : {}
       if (meta.dateCreated) {props['date']['created'] = meta.dateCreated}
