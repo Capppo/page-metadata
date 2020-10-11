@@ -1,0 +1,4 @@
+[build]
+  build = "yarn build"
+  functions = "functions/"
+  publish = "dist"
